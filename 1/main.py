@@ -28,6 +28,7 @@ def find_second(input_data):
                     return multi
 
 
+# simple bruteforce solution
 first_answer = find_first(data)
 print(f'First answer: {first_answer}')
 second_answer = find_second(data)

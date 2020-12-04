@@ -22,9 +22,11 @@ def second_answer(input_data):
     steps = [1, 3, 5, 7, 1]
     down_steps = [1, 1, 1, 1, 2]
     output = []
+    # steps down
     for i, step in enumerate(steps):
         counter = 0
         position = 0
+        # steps right
         for j, item in enumerate(input_data):
             if down_steps[i] == 2 and j % 2 != 0:
                 continue

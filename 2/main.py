@@ -22,6 +22,7 @@ def second_answer(input_data):
         first, second = split_line[0].split("-")
         required = split_line[1].strip(":")
         password = split_line[2]
+        # find all locations that have the required char
         required_locations = [index + 1 for index, char in enumerate(password) if char == required]
         if (int(first) in required_locations) != (int(second) in required_locations):
             valid_passwords += 1
