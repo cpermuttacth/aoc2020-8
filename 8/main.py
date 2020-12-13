@@ -88,4 +88,4 @@ def second_answer(input_data):
 
 
 print(f'First answer: {first_answer(file)}')
-print(f'Second answer: {second_answer(file)}')  # arvatut 7
+print(f'Second answer: {second_answer(file)}')
