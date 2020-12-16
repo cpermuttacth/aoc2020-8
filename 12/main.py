@@ -1,7 +1,6 @@
 import numpy
-from scipy.ndimage.interpolation import rotate
 
-with open("test.txt") as file:
+with open("input.txt") as file:
     file = file.read().splitlines()
     file = [(i[0], int(i[1:])) for i in file]
 
@@ -43,26 +42,26 @@ def first_answer(input_data):
 
 
 def second_answer(input_data):
-    # change in position system
+    # change in position system to [x, y]
     directions = {
         "N": numpy.array([0, 1]),
         "S": numpy.array([0, -1]),
-        "W": numpy.array([1, 0]),
-        "E": numpy.array([-1, 0])
+        "W": numpy.array([-1, 0]),
+        "E": numpy.array([1, 0])
     }
     # for matrix rotations
     turnings = {
         90: {
-            "R": numpy.array([[0, -1], [1, 0]]),
-            "L": numpy.array([[0, 1], [-1, 0]])
+            "R": numpy.array([[0, 1], [-1, 0]]),
+            "L": numpy.array([[0, -1], [1, 0]])
         },
         180: {
             "R": numpy.array([[-1, 0], [0, -1]]),
-            "L": numpy.array([[-1, 0], [0, 1]])
+            "L": numpy.array([[-1, 0], [0, -1]])
         },
         270: {
-            "R": numpy.array([[0, 1], [-1, 0]]),
-            "L": numpy.array([[0, -1], [-1, 0]])
+            "R": numpy.array([[0, -1], [1, 0]]),
+            "L": numpy.array([[0, 1], [-1, 0]])
         }
     }
     position = numpy.array([0, 0])
@@ -70,18 +69,24 @@ def second_answer(input_data):
     for item in input_data:
         action = item[0]
         value = item[1]
+        # only move waypoint
         if action in ["N", "S", "W", "E"]:
             movement = numpy.multiply(directions[action], value)
             waypoint = numpy.add(waypoint, movement)
+        # move waypoint and position
         elif action == "F":
-            movement = numpy.multiply(waypoint, value)
+            new_waypoint = numpy.subtract(waypoint, position)
+            movement = numpy.multiply(new_waypoint, value)
             position = numpy.add(position, movement)
+            waypoint = numpy.add(position, new_waypoint)
+        # rotate waypoint
         else:
-            nulled_position = numpy.array([[0, 0], numpy.subtract(waypoint, position)])
-            waypoint = numpy.dot(nulled_position, turnings[value][action])[1]
-            waypoint = numpy.add(waypoint, position)
-        position = position
-    return position, waypoint
+            nulled_position = numpy.subtract(waypoint, position)
+            new_waypoint = numpy.dot(turnings[value][action], nulled_position)
+            waypoint = numpy.add(new_waypoint, position)
+
+    print(position, waypoint)
+    return abs(position[0]) + abs(position[1])
 
 
 print(f'First answer: {first_answer(file)}')
